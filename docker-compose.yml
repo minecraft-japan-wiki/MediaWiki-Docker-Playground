@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    env_file: .env
+    volumes:
+      - db_data:/var/lib/mysql
+
+  mediawiki:
+    image: mediawiki:stable-fpm-alpine
+    restart: always
+    depends_on:
+      - db
+    env_file: .env
+
+  nginx:
+    image: nginx:alpine-slim
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - mediawiki
+
+volumes:
+  db_data:
