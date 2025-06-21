@@ -11,6 +11,8 @@ services:
     container_name: MediaWiki
     image: mediawiki:stable-fpm-alpine
     restart: always
+    volumes:
+      - ./mediawiki:/var/www/html
     depends_on:
       - db
     env_file: .env
